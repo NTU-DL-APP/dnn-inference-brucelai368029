@@ -3,10 +3,10 @@ import json
 
 # === Activation functions ===
 def relu(x):
-    # TODO: Implement the Rectified Linear Unit
     return np.maximum(0, x)
 def softmax(x):
-    x = np.atleast_2d(x)  # 確保至少是 2D
+    x = np.atleast_2d(x)
+    print(f"Softmax input shape: {x.shape}")  # 幫助 debug
     e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
     out = e_x / np.sum(e_x, axis=1, keepdims=True)
     return out[0] if out.shape[0] == 1 else out
@@ -47,3 +47,5 @@ def nn_inference(model_arch, weights, data):
     output = nn_forward_h5(model_arch, weights, data)
     return output
     
+test_logits = np.array([[1.0, 2.0, 3.0]])
+print(softmax(test_logits))
