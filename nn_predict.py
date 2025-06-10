@@ -7,17 +7,15 @@ def relu(x):
     return np.maximum(0, x)
 
 def softmax(x):
-    x = np.array(x, dtype=np.float64)  # 确保数据类型
+    x = np.array(x, dtype=np.float64)
     if x.ndim == 1:
-        # 1D情况
-        x_max = np.max(x)
-        exp_x = np.exp(x - x_max)
-        return exp_x / np.sum(exp_x)
-    else:
-        # 多维情况
-        x_max = np.max(x, axis=-1, keepdims=True)
-        exp_x = np.exp(x - x_max)
-        return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+        x = x.reshape(1, -1)  # 轉成 2D 處理，統一流程
+
+    x_max = np.max(x, axis=1, keepdims=True)
+    exp_x = np.exp(x - x_max)
+    softmax_x = exp_x / np.sum(exp_x, axis=1, keepdims=True)
+
+    return softmax_x if softmax_x.shape[0] > 1 else softmax_x[0]
 
 # === Flatten ===
 def flatten(x):
@@ -51,11 +49,7 @@ def nn_forward_h5(model_arch, weights, data):
     return x
 # You are free to replace nn_forward_h5() with your own implementation 
 def nn_inference(model_arch, weights, data):
-    return nn_forward_h5(model_arch, weights, data)
-    print(f"Input data shape: {data.shape}")
-    print(f"Input data type: {data.dtype}")
-    result = nn_forward_h5(model_arch, weights, data)
-    print(f"Output shape: {result.shape}")
-    print(f"Output type: {result.dtype}")
-    return result
+    data = np.array(data, dtype=np.float32)  # 確保輸入類型正確
+    output = nn_forward_h5(model_arch, weights, data)
+    return output
     
