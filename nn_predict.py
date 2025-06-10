@@ -5,18 +5,16 @@ import json
 def relu(x):
     # TODO: Implement the Rectified Linear Unit
     return np.maximum(0, x)
-
 def softmax(x):
     x = np.array(x, dtype=np.float64)
     if x.ndim == 1:
-        x = x.reshape(1, -1)  # 轉成 2D 處理，統一流程
-
+        x = x.reshape(1, -1)
     x_max = np.max(x, axis=1, keepdims=True)
     exp_x = np.exp(x - x_max)
-    softmax_x = exp_x / np.sum(exp_x, axis=1, keepdims=True)
-
-    return softmax_x if softmax_x.shape[0] > 1 else softmax_x[0]
-
+    sum_exp = np.sum(exp_x, axis=1, keepdims=True)
+    result = exp_x / sum_exp
+    return result if result.shape[0] > 1 else result[0]
+    
 # === Flatten ===
 def flatten(x):
     return x.reshape(x.shape[0], -1)
