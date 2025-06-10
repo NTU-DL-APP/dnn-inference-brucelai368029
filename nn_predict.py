@@ -2,11 +2,19 @@ import numpy as np
 
 def relu(x):
     return np.maximum(0, x)
-
 def softmax(x):
-    e_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
-    return e_x / e_x.sum(axis=-1, keepdims=True)
-
+    x = np.array(x)
+    # 支援一維和二維輸入
+    if x.ndim == 1:
+        x = x - np.max(x)
+        e_x = np.exp(x)
+        return e_x / np.sum(e_x)
+    elif x.ndim == 2:
+        x = x - np.max(x, axis=1, keepdims=True)
+        e_x = np.exp(x)
+        return e_x / np.sum(e_x, axis=1, keepdims=True)
+    else:
+        raise ValueError("softmax only supports 1D or 2D arrays")
 def flatten(x):
     return x.reshape(x.shape[0], -1)
 
