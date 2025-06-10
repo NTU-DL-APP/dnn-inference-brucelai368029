@@ -6,9 +6,10 @@ def relu(x):
     # TODO: Implement the Rectified Linear Unit
     return np.maximum(0, x)
 def softmax(x):
-    # x.shape: (batch_size, num_classes)
+    x = np.atleast_2d(x)  # 確保至少是 2D
     e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
-    return e_x / np.sum(e_x, axis=1, keepdims=True)
+    out = e_x / np.sum(e_x, axis=1, keepdims=True)
+    return out[0] if out.shape[0] == 1 else out
     
 # === Flatten ===
 def flatten(x):
